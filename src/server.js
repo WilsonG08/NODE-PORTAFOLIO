@@ -30,6 +30,8 @@ app.use(methodOverride('_method'))
 
 // Rutas
 app.use(require('./routers/portafolio.routes'))
+app.use(require('./routers/index.routes'))
+
 
 
 // Archivos estaticos

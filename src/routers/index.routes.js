@@ -1,6 +1,6 @@
 const{Router} = require('express')
 
-const router = Router()
+
 
 /* const { renderAllPortafolios,
         renderPortafolio,
@@ -22,4 +22,18 @@ router.put('/portafolio/edit/:id', updatePortafolio)
 
 router.delete('/portafolio/delete/:id', deletePortafolio)
  */
+
+
+
+
+const router = Router()
+
+router.get('/',(req,res)=>{
+    res.render('index')
+})
+
+router.get('/login',(req,res)=>{
+    res.render('login')
+})
+
 module.exports = router
