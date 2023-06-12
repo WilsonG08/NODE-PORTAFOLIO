@@ -17,5 +17,4 @@ const portfolioSchema = new Schema({
     timestamps:true
 })
 
-// Creacion de la coleccion y tambien esra 
-module.exports = ('portafolio',portfolioSchema)
+module.exports = model('portfolio',portfolioSchema)
