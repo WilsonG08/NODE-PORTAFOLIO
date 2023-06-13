@@ -42,7 +42,12 @@ app.use(passport.initialize())
 // INICIALIZAR SESSION
 app.use(passport.session())
 
-//Variables globales
+
+// Variables globales
+app.use((req,res,next)=>{
+    res.locals.user = req.user?.name || null
+    next()
+})
 
 // Rutas
 app.use(require('./routers/portafolio.routes'))
