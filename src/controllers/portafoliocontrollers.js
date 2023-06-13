@@ -1,3 +1,4 @@
+// Hacer la importacion del modelo
 const Portfolio = require('../models/portafolio')
 
 

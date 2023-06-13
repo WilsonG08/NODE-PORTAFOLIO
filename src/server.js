@@ -6,8 +6,14 @@ const {engine} = require('express-handlebars')
 const methodOverride = require('method-override');
 
 
+const passport = require('passport');
+const session = require('express-session');
+
+
 // inicializaciones
 const app = express()
+// INVOCAR EL ARCHIVO PASSPORT
+require('./config/passport')
 
 //configuraciones
 app.set('port', process.env.port || 3000)
@@ -25,12 +31,23 @@ app.set('view engine','.hbs')
 //Middlewares
 app.use(express.urlencoded({extenden:false}))
 app.use(methodOverride('_method'))
+// CREAMOS LA KEY PARA EL SERVIDOR - secret
+app.use(session({ 
+    secret: 'secret',
+    resave:true,
+    saveUninitialized:true
+}));
+// INICIALIZAR PASSPORT
+app.use(passport.initialize())
+// INICIALIZAR SESSION
+app.use(passport.session())
 
 //Variables globales
 
 // Rutas
 app.use(require('./routers/portafolio.routes'))
 app.use(require('./routers/index.routes'))
+app.use(require('./routers/user.routes'))
 
 
 
