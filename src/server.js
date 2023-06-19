@@ -4,6 +4,7 @@ const express = require('express')
 const path = require('path');
 const {engine} = require('express-handlebars')
 const methodOverride = require('method-override');
+const fileUpload = require('express-fileupload')
 
 
 const passport = require('passport');
@@ -26,6 +27,11 @@ app.engine('.hbs',engine({
     extname:'.hbs'
 }))
 app.set('view engine','.hbs')
+
+app.use(fileUpload({
+    useTempFiles : true,
+    tempFileDir : './uploads'
+}));
 
 
 //Middlewares
