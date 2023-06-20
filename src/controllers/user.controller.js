@@ -1,3 +1,5 @@
+const { sendMailToUser } = require("../config/nodemailer")
+
 // importar passport
 const passport = require("passport")
 
@@ -31,8 +33,26 @@ const registerNewUser = async(req,res)=>{
     const newUser = await new User({name,email,password,confirmpassword})
     // ENCRIPTAR EL PASSWORD
     newUser.password = await newUser.encrypPassword(password)
+    newUser.crearToken()
+    const token = newUser.crearToken()
+    sendMailToUser(email,token)
     newUser.save()
     res.redirect('/user/login')
+}
+
+// CONFIRMAR EL TOKEN
+const confirmEmail = async(req,res)=>{
+    if(!(req.params.token)) return res.send("Lo sentimos, no se puede validar la cuenta")
+    // CARGAR EL USUARIO EN BASE AL TOKEN ENVIADO
+    const userBDD = await User.findOne({token:req.params.token})
+    // SETEAR EL TOKEN A NULL
+    userBDD.token = null
+    // CAMBIAR EL confirmEmail A TRUE
+    userBDD.confirmEmail=true
+    // GUARDAR EN BDD
+    await userBDD.save()
+    // MENSAJE DE RESPUESTA
+    res.send('Token confirmado, ya puedes iniciar sesión');
 }
 
 // Presentar datos 
@@ -59,5 +79,6 @@ module.exports={
     registerNewUser,
     renderLoginForm,
     loginUser,
-    logoutUser
+    logoutUser,
+    confirmEmail
 }

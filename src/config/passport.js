@@ -22,6 +22,7 @@ passport.use(new LocalStrategy({
     // VALIDACION DEL PASSWORD DEL FORMULARIO VS EL DE LA BASE DE DATOS
     if(!passwordUser) return done("Lo sentimos, los passwords no coinciden",false)
     // RETORNA EL USUARIO
+    if(userBDD.confirmEmail===false) return done("Lo sentimos, debe verificar la cuenta en su correo electrónico",false)
     return done(null,userBDD)
 }))
 
