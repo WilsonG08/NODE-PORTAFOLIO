@@ -1,6 +1,7 @@
 // Hacer la importacion del modelo
 const Portfolio = require('../models/portafolio')
 const fs = require('fs-extra')
+// IMPORTAR EL METODO uploadImage Y EL METODO deleteImage
 const { uploadImage,deleteImage } = require('../config/clodinary')
 
 
@@ -20,20 +21,28 @@ const renderPortafolioForm = (req,res)=>{
 }
 
 // Captura los daots del formulario para almacenar en la BBD
+// Almacena en la BDD
 const createNewPortafolio =async (req,res)=>{
-
+    // DSESTRUTURAR
     const {title, category,description} = req.body   
+    // Crea una nueva instancia 
     const newPortfolio = new Portfolio({title,category,description})
+    // A la instancia del documento newPortfolio le agrego ahora el usuario
+    // res.send_id viene de la sesion.
     newPortfolio.user = req.user._id
+    
+    // VALIDACION DE LA IMAGEN
     if(!(req.files?.image)) return res.send("Se requiere una imagen")
     // LA INVOCACION DEL METODO  Y LE PASO EL PATH DE LA IMAGEN
     const imageUpload = await uploadImage(req.files.image.tempFilePath)
+   
     newPortfolio.image = {
         public_id:imageUpload.public_id,
         secure_url:imageUpload.secure_url
     }
-    // ELIMINA EL ARCHIVO 
+    // ELIMINA EL ARCHIVO  TEMP DEL DIRECTORIO UPLOADS 
     await fs.unlink(req.files.image.tempFilePath)
+    // EJECUTA EL METODO SAVE
     await newPortfolio.save()
     res.redirect('/portafolios')
 }
@@ -51,13 +60,20 @@ const updatePortafolio = async(req,res)=>{
     // VERIFICAR EL id DEL PORTAFOLIO SEA EL MISMO
     const portfolio = await Portfolio.findById(req.params.id).lean()
     // SI ES TRUE CONTINUAR CON LA EDICION Y SI ES FALSE ENVIAR A LA RUTA PORTAFOLIOS
-
-    if(portfolio._id != req.params.id) return res.redirect('/portafolios')
     
-    if(req.files?.image) {
+    // if(!(portfolio._id != req.params.id) return res.redirect('/portafolios')
+    if(portfolio._id != req.params.id) return res.redirect('/portafolios')
+
+    if(req.files?.image) 
+    {
+        // VAMOAS A REALIZAR LA ACTUALIZACION DE LA IMAGEN
+        // VALIDAR QUE VNEGA UNA IMAGEN EN EL FORMULARIO
         if(!(req.files?.image)) return res.send("Se requiere una imagen")
+        // ELIMINAR LA IMAGEN EN CLOUDINARY
         await deleteImage(portfolio.image.public_id)
+        // CARGAR LA NUEVA IMAGEN
         const imageUpload = await uploadImage(req.files.image.tempFilePath)
+        // CONSTRUIR LA DATA PARA ACTUALIZAR EN BDD
         const data ={
             title:req.body.title || portfolio.name,
             category: req.body.category || portfolio.category,
@@ -67,7 +83,7 @@ const updatePortafolio = async(req,res)=>{
             secure_url:imageUpload.secure_url
             }
         }
-        // eLIMINA LA IMAGEN TEMPORAL
+        // ELIMINA LA IMAGEN TEMPORAL
         await fs.unlink(req.files.image.tempFilePath)
         // Actualiza en BDD findByIdAndUpdate
         await Portfolio.findByIdAndUpdate(req.params.id,data)

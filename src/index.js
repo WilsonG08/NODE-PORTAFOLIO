@@ -1,3 +1,4 @@
+// METODO PARA CARGAR LAS VARIABLES DEL ARCHIVO .ENV
 require('dotenv').config()
 
 const app = require('./server.js')

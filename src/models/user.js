@@ -40,6 +40,7 @@ userSchema.methods.matchPassword = async function(password){
 
 // Método para crear un token 
 userSchema.methods.crearToken = function(){
+    // Funcion incorporada de MATH
     return token = this.token = Math.random().toString(36).slice(2)
 }
 

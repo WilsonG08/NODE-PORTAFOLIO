@@ -36,24 +36,11 @@ const registerNewUser = async(req,res)=>{
     newUser.crearToken()
     const token = newUser.crearToken()
     sendMailToUser(email,token)
+    
     newUser.save()
     res.redirect('/user/login')
 }
 
-// CONFIRMAR EL TOKEN
-const confirmEmail = async(req,res)=>{
-    if(!(req.params.token)) return res.send("Lo sentimos, no se puede validar la cuenta")
-    // CARGAR EL USUARIO EN BASE AL TOKEN ENVIADO
-    const userBDD = await User.findOne({token:req.params.token})
-    // SETEAR EL TOKEN A NULL
-    userBDD.token = null
-    // CAMBIAR EL confirmEmail A TRUE
-    userBDD.confirmEmail=true
-    // GUARDAR EN BDD
-    await userBDD.save()
-    // MENSAJE DE RESPUESTA
-    res.send('Token confirmado, ya puedes iniciar sesión');
-}
 
 // Presentar datos 
 const renderLoginForm =(req,res)=>{
@@ -72,6 +59,22 @@ const logoutUser =(req,res)=>{
         if (err) return res.send("Ocurrio un error") 
         res.redirect('/');
     });
+}
+
+
+// CONFIRMAR EL TOKEN
+const confirmEmail = async(req,res)=>{
+    if(!(req.params.token)) return res.send("Lo sentimos, no se puede validar la cuenta")
+    // CARGAR EL USUARIO EN BASE AL TOKEN ENVIADO
+    const userBDD = await User.findOne({token:req.params.token})
+    // SETEAR EL TOKEN A NULL
+    userBDD.token = null
+    // CAMBIAR EL confirmEmail A TRUE
+    userBDD.confirmEmail=true
+    // GUARDAR EN BDD
+    await userBDD.save()
+    // MENSAJE DE RESPUESTA
+    res.send('Token confirmado, ya puedes iniciar sesión');
 }
 
 module.exports={

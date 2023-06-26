@@ -28,6 +28,7 @@ app.engine('.hbs',engine({
 }))
 app.set('view engine','.hbs')
 
+// Temporal
 app.use(fileUpload({
     useTempFiles : true,
     tempFileDir : './uploads'
@@ -35,6 +36,7 @@ app.use(fileUpload({
 
 
 //Middlewares
+// aqui cambio palabra extenden por extended
 app.use(express.urlencoded({extenden:false}))
 app.use(methodOverride('_method'))
 // CREAMOS LA KEY PARA EL SERVIDOR - secret

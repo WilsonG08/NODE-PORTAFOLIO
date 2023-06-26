@@ -1,7 +1,5 @@
 
-
 const cloudinary = require('cloudinary').v2
-
 
 cloudinary.config({ 
     // LLAMAR A LAS VARIABLES DEL ARCHIVO .ENV
