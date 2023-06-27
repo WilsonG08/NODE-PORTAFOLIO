@@ -2,7 +2,6 @@
 const nodemailer = require("nodemailer");
 
 
-
 // create reusable transporter object using the default SMTP transport
 // CONFIGURACIONES DEL SERVIDOR SMTP
 const transporter = nodemailer.createTransport({
