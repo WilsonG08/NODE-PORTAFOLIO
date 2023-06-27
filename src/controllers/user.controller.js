@@ -4,7 +4,7 @@ const { sendMailToUser } = require("../config/nodemailer")
 const passport = require("passport")
 
 // Importa el modelo 
-const User = require('../models/User')
+const User = require('../models/user')
 
 
 

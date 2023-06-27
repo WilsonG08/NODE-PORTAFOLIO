@@ -2,7 +2,7 @@
 // IMPORTACION DE PASSPORT
 const passport = require('passport')
 // IMPORTAR EL MODELO USER
-const User = require('../models/User')
+const User = require('../models/user')
 
 // DEFINICION DE LA ESTRATEGIA
 const LocalStrategy = require('passport-local').Strategy
